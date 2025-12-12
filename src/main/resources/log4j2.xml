@@ -50,7 +50,7 @@
         </Logger>
 
         <!-- MyBatis Logger -->
-        <Logger name="com.baomidou.mybatisplus" level="DEBUG" additivity="false">
+        <Logger name="com.baomidou.mybatisplus" level="INFO" additivity="false">
             <AppenderRef ref="Console"/>
             <AppenderRef ref="AppLogFile"/>
         </Logger>

@@ -113,24 +113,22 @@ public class JwtTokenUtil {
      * Create token
      */
     private String createToken(Map<String, Object> claims, String subject) {
-        Date now = new Date();
-        Date expiryDate = new Date(now.getTime() + expiration);
-
-        return Jwts.builder()
-                .claims(claims)
-                .subject(subject)
-                .issuedAt(now)
-                .expiration(expiryDate)
-                .signWith(getSignKey())
-                .compact();
+        return createTokenWithExpiration(claims, subject, expiration);
     }
 
     /**
      * Create refresh token
      */
     private String createRefreshToken(Map<String, Object> claims, String subject) {
+        return createTokenWithExpiration(claims, subject, refreshExpiration);
+    }
+
+    /**
+     * Create token with custom expiration
+     */
+    private String createTokenWithExpiration(Map<String, Object> claims, String subject, Long expirationTime) {
         Date now = new Date();
-        Date expiryDate = new Date(now.getTime() + refreshExpiration);
+        Date expiryDate = new Date(now.getTime() + expirationTime);
 
         return Jwts.builder()
                 .claims(claims)
