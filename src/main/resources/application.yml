@@ -62,6 +62,7 @@ jwt:
   # Use a strong, randomly generated key and store it in environment variables or secure configuration
   secret: your-256-bit-secret-key-change-this-in-production-environment-make-it-long-enough
   expiration: 86400000  # 24 hours in milliseconds
+  refresh-expiration: 604800000  # 7 days in milliseconds
   header: Authorization
   prefix: "Bearer "
 

@@ -39,3 +39,6 @@ target/
 
 # Spring Boot
 spring-boot-*.log
+
+# Log4j2 logs directory
+logs/

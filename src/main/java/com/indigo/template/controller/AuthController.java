@@ -3,7 +3,10 @@ package com.indigo.template.controller;
 import com.indigo.template.common.response.ApiResponse;
 import com.indigo.template.dto.request.LoginRequest;
 import com.indigo.template.dto.response.JwtResponse;
+import com.indigo.template.dto.response.UserInfoDto;
+import com.indigo.template.entity.User;
 import com.indigo.template.security.jwt.JwtTokenUtil;
+import com.indigo.template.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
@@ -36,6 +39,7 @@ public class AuthController {
 
     private final AuthenticationManager authenticationManager;
     private final JwtTokenUtil jwtTokenUtil;
+    private final UserService userService;
 
     /**
      * JWT Login - Returns JWT token for /api/** endpoints
@@ -48,11 +52,24 @@ public class AuthController {
                 new UsernamePasswordAuthenticationToken(request.getUsername(), request.getPassword())
         );
 
-        // Generate JWT token
+        // Generate JWT tokens
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-        String token = jwtTokenUtil.generateToken(userDetails);
+        String accessToken = jwtTokenUtil.generateToken(userDetails);
+        String refreshToken = jwtTokenUtil.generateRefreshToken(userDetails);
 
-        JwtResponse response = new JwtResponse(token, userDetails.getUsername());
+        // Get user info
+        User user = userService.getUserByUsername(userDetails.getUsername());
+        UserInfoDto userInfo = userService.buildUserInfoDto(user);
+
+        // Build response
+        JwtResponse response = JwtResponse.builder()
+                .accessToken(accessToken)
+                .refreshToken(refreshToken)
+                .tokenType("Bearer")
+                .expiresIn(jwtTokenUtil.getExpirationTime())
+                .userInfo(userInfo)
+                .build();
+
         return ApiResponse.success(response);
     }
 
@@ -118,3 +135,4 @@ public class AuthController {
     }
 
 }
+

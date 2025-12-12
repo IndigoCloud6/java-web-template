@@ -4,6 +4,7 @@ import com.indigo.template.security.filter.JwtAuthenticationFilter;
 import com.indigo.template.security.handler.CustomAccessDeniedHandler;
 import com.indigo.template.security.handler.CustomAuthenticationEntryPoint;
 import com.indigo.template.security.jwt.JwtTokenUtil;
+import com.indigo.template.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -15,12 +16,8 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
@@ -39,6 +36,7 @@ public class SecurityConfig {
     private final CustomAuthenticationEntryPoint authenticationEntryPoint;
     private final CustomAccessDeniedHandler accessDeniedHandler;
     private final JwtTokenUtil jwtTokenUtil;
+    private final UserService userService;
 
     @Value("${jwt.header}")
     private String jwtHeader;
@@ -95,31 +93,7 @@ public class SecurityConfig {
      */
     @Bean
     public JwtAuthenticationFilter jwtAuthenticationFilter() {
-        return new JwtAuthenticationFilter(jwtTokenUtil, userDetailsService(), jwtHeader, jwtPrefix);
-    }
-
-    /**
-     * In-memory user details service for demo purposes
-     * 
-     * SECURITY WARNING: This is for demonstration only!
-     * In production, use a proper user store (database, LDAP, etc.)
-     * and externalize credentials to environment variables or secure configuration
-     */
-    @Bean
-    public UserDetailsService userDetailsService() {
-        UserDetails apiUser = User.builder()
-                .username("apiuser")
-                .password(passwordEncoder().encode("apipass"))
-                .roles("USER")
-                .build();
-
-        UserDetails adminUser = User.builder()
-                .username("admin")
-                .password(passwordEncoder().encode("adminpass"))
-                .roles("ADMIN")
-                .build();
-
-        return new InMemoryUserDetailsManager(apiUser, adminUser);
+        return new JwtAuthenticationFilter(jwtTokenUtil, userService, jwtHeader, jwtPrefix);
     }
 
     @Bean
@@ -133,3 +107,4 @@ public class SecurityConfig {
     }
 
 }
+
