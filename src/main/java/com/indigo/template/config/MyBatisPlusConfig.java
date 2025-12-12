@@ -3,6 +3,7 @@ package com.indigo.template.config;
 import com.baomidou.mybatisplus.core.handlers.MetaObjectHandler;
 import com.baomidou.mybatisplus.extension.plugins.MybatisPlusInterceptor;
 import org.apache.ibatis.reflection.MetaObject;
+import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -12,6 +13,7 @@ import java.time.LocalDateTime;
  * MyBatis-Plus Configuration
  */
 @Configuration
+@MapperScan("com.indigo.template.mapper")
 public class MyBatisPlusConfig {
 
     /**
