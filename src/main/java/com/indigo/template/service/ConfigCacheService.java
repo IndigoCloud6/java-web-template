@@ -40,11 +40,14 @@ public class ConfigCacheService {
     /**
      * 从缓存获取配置值
      * 如果缓存中不存在，则从数据库加载
+     * 如果数据库中也不存在，返回null
      */
     public String getConfigValue(String key) {
         return configCache.get(key, k -> {
             String value = configService.getConfigValue(k);
-            log.debug("Cache miss for key: {}, loaded from database", k);
+            log.debug("Cache miss for key: {}, loaded from database: {}", k, value != null ? "found" : "not found");
+            // Caffeine allows null values to be cached, which is appropriate here
+            // as it distinguishes between "key never queried" vs "key queried but not found"
             return value;
         });
     }
