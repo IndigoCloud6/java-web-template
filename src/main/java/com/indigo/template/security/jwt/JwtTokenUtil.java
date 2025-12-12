@@ -28,6 +28,9 @@ public class JwtTokenUtil {
     @Value("${jwt.expiration}")
     private Long expiration;
 
+    @Value("${jwt.refresh-expiration:604800000}") // Default: 7 days
+    private Long refreshExpiration;
+
     /**
      * Get secret key
      */
@@ -84,6 +87,22 @@ public class JwtTokenUtil {
     }
 
     /**
+     * Generate refresh token for user
+     */
+    public String generateRefreshToken(UserDetails userDetails) {
+        Map<String, Object> claims = new HashMap<>();
+        claims.put("type", "refresh");
+        return createRefreshToken(claims, userDetails.getUsername());
+    }
+
+    /**
+     * Get token expiration time in seconds
+     */
+    public Long getExpirationTime() {
+        return expiration / 1000;
+    }
+
+    /**
      * Generate token with claims
      */
     public String generateToken(String username, Map<String, Object> claims) {
@@ -94,8 +113,22 @@ public class JwtTokenUtil {
      * Create token
      */
     private String createToken(Map<String, Object> claims, String subject) {
+        return createTokenWithExpiration(claims, subject, expiration);
+    }
+
+    /**
+     * Create refresh token
+     */
+    private String createRefreshToken(Map<String, Object> claims, String subject) {
+        return createTokenWithExpiration(claims, subject, refreshExpiration);
+    }
+
+    /**
+     * Create token with custom expiration
+     */
+    private String createTokenWithExpiration(Map<String, Object> claims, String subject, Long expirationTime) {
         Date now = new Date();
-        Date expiryDate = new Date(now.getTime() + expiration);
+        Date expiryDate = new Date(now.getTime() + expirationTime);
 
         return Jwts.builder()
                 .claims(claims)
