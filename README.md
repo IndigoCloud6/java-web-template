@@ -5,7 +5,7 @@ A production-ready Spring Boot web application template with dual authentication
 ## Features
 
 - **Build**: Maven
-- **Java**: JDK 21
+- **Java**: JDK 21 (compatible with JDK 17+)
 - **Framework**: Spring Boot 3.5.8
 - **Database**: MyBatis-Plus + MySQL
 - **Authentication**: 
@@ -38,7 +38,7 @@ A production-ready Spring Boot web application template with dual authentication
 
 ## Prerequisites
 
-- JDK 21
+- JDK 21 (or JDK 17+)
 - Maven 3.6+
 - Docker & Docker Compose (for MySQL and Redis)
 

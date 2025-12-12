@@ -13,7 +13,6 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
-import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
 
@@ -23,18 +22,13 @@ import java.io.IOException;
  * JWT Authentication Filter
  */
 @Slf4j
-@Component
 @RequiredArgsConstructor
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     private final JwtTokenUtil jwtTokenUtil;
     private final UserDetailsService userDetailsService;
-
-    @Value("${jwt.header}")
-    private String tokenHeader;
-
-    @Value("${jwt.prefix}")
-    private String tokenPrefix;
+    private final String tokenHeader;
+    private final String tokenPrefix;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request,

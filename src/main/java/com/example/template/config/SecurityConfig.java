@@ -3,7 +3,9 @@ package com.example.template.config;
 import com.example.template.security.filter.JwtAuthenticationFilter;
 import com.example.template.security.handler.CustomAccessDeniedHandler;
 import com.example.template.security.handler.CustomAuthenticationEntryPoint;
+import com.example.template.security.jwt.JwtTokenUtil;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -34,9 +36,15 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @RequiredArgsConstructor
 public class SecurityConfig {
 
-    private final JwtAuthenticationFilter jwtAuthenticationFilter;
     private final CustomAuthenticationEntryPoint authenticationEntryPoint;
     private final CustomAccessDeniedHandler accessDeniedHandler;
+    private final JwtTokenUtil jwtTokenUtil;
+
+    @Value("${jwt.header}")
+    private String jwtHeader;
+
+    @Value("${jwt.prefix}")
+    private String jwtPrefix;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -47,8 +55,11 @@ public class SecurityConfig {
                         .requestMatchers(
                                 "/health",
                                 "/auth/**",
+                                "/swagger-ui.html",
                                 "/swagger-ui/**",
                                 "/v3/api-docs/**",
+                                "/swagger-resources/**",
+                                "/webjars/**",
                                 "/actuator/**"
                         ).permitAll()
                         // JWT protected endpoints (stateless)
@@ -72,9 +83,17 @@ public class SecurityConfig {
                 );
 
         // Add JWT filter before UsernamePasswordAuthenticationFilter
-        http.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
+        http.addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
+    }
+
+    /**
+     * JWT Authentication Filter Bean
+     */
+    @Bean
+    public JwtAuthenticationFilter jwtAuthenticationFilter() {
+        return new JwtAuthenticationFilter(jwtTokenUtil, userDetailsService(), jwtHeader, jwtPrefix);
     }
 
     /**
