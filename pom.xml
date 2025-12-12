@@ -12,7 +12,7 @@
         <relativePath/>
     </parent>
 
-    <groupId>com.example</groupId>
+    <groupId>com.indgio</groupId>
     <artifactId>java-web-template</artifactId>
     <version>1.0.0</version>
     <name>java-web-template</name>
