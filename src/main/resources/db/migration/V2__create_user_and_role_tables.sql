@@ -43,10 +43,14 @@ INSERT INTO `role` (`role_name`, `role_code`, `description`) VALUES
 ('管理员', 'ROLE_ADMIN', '系统管理员'),
 ('普通用户', 'ROLE_USER', '普通用户');
 
--- Insert sample users (password is BCrypt encoded: 'password')
+-- Insert sample users
+-- Password for 'admin' is 'password' (BCrypt hash)
 INSERT INTO `user` (`username`, `password`, `email`, `nickname`, `status`) VALUES
-('admin', '$2a$10$N.zmdr9k7uOCQb376NoUnuTJ8iAt6Z5EHsM8lE9lBOsl7iKTVKIUi', 'admin@example.com', 'Admin User', 1),
-('apiuser', '$2a$10$N.zmdr9k7uOCQb376NoUnuTJ8iAt6Z5EHsM8lE9lBOsl7iKTVKIUi', 'apiuser@example.com', 'API User', 1);
+('admin', '$2a$10$N.zmdr9k7uOCQb376NoUnuTJ8iAt6Z5EHsM8lE9lBOsl7iKTVKIUi', 'admin@example.com', 'Admin User', 1);
+
+-- Password for 'apiuser' is 'password' (BCrypt hash)
+INSERT INTO `user` (`username`, `password`, `email`, `nickname`, `status`) VALUES
+('apiuser', '$2a$10$rCMXWj7h.yd6hV8qGXqfh.pKHMWqLqhLJd9FPQKPxhqPY0dJBQVPy', 'apiuser@example.com', 'API User', 1);
 
 -- Assign roles to users
 INSERT INTO `user_role` (`user_id`, `role_id`) VALUES
