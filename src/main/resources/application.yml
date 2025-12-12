@@ -1,0 +1,94 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: java-web-template
+  
+  # Database Configuration
+  datasource:
+    url: jdbc:mysql://localhost:3306/web_template?useUnicode=true&characterEncoding=utf8&serverTimezone=Asia/Shanghai
+    username: root
+    password: root
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    hikari:
+      maximum-pool-size: 10
+      minimum-idle: 5
+      connection-timeout: 30000
+  
+  # Redis Configuration
+  data:
+    redis:
+      host: localhost
+      port: 6379
+      password: 
+      database: 0
+      lettuce:
+        pool:
+          max-active: 8
+          max-idle: 8
+          min-idle: 0
+          max-wait: -1ms
+  
+  # Session Configuration (Redis-backed)
+  session:
+    store-type: redis
+    redis:
+      namespace: spring:session
+    timeout: 30m
+  
+  # JSON Configuration
+  jackson:
+    time-zone: Asia/Shanghai
+    date-format: yyyy-MM-dd HH:mm:ss
+    serialization:
+      write-dates-as-timestamps: false
+
+# MyBatis-Plus Configuration
+mybatis-plus:
+  configuration:
+    map-underscore-to-camel-case: true
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+  global-config:
+    db-config:
+      id-type: auto
+      logic-delete-field: deleted
+      logic-delete-value: 1
+      logic-not-delete-value: 0
+  type-aliases-package: com.example.template.domain.entity
+
+# JWT Configuration
+jwt:
+  # SECURITY WARNING: Change this secret in production!
+  # Use a strong, randomly generated key and store it in environment variables or secure configuration
+  secret: your-256-bit-secret-key-change-this-in-production-environment-make-it-long-enough
+  expiration: 86400000  # 24 hours in milliseconds
+  header: Authorization
+  prefix: "Bearer "
+
+# Actuator Configuration
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info
+  endpoint:
+    health:
+      show-details: when-authorized
+
+# SpringDoc Configuration
+springdoc:
+  api-docs:
+    path: /v3/api-docs
+  swagger-ui:
+    path: /swagger-ui.html
+    tags-sorter: alpha
+    operations-sorter: alpha
+  default-consumes-media-type: application/json
+  default-produces-media-type: application/json
+
+# Logging
+logging:
+  level:
+    com.example.template: INFO
+    org.springframework.security: DEBUG
