@@ -59,6 +59,8 @@ mybatis-plus:
 
 # JWT Configuration
 jwt:
+  # SECURITY WARNING: Change this secret in production!
+  # Use a strong, randomly generated key and store it in environment variables or secure configuration
   secret: your-256-bit-secret-key-change-this-in-production-environment-make-it-long-enough
   expiration: 86400000  # 24 hours in milliseconds
   header: Authorization

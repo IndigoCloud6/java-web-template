@@ -98,6 +98,10 @@ public class SecurityConfig {
 
     /**
      * In-memory user details service for demo purposes
+     * 
+     * SECURITY WARNING: This is for demonstration only!
+     * In production, use a proper user store (database, LDAP, etc.)
+     * and externalize credentials to environment variables or secure configuration
      */
     @Bean
     public UserDetailsService userDetailsService() {
